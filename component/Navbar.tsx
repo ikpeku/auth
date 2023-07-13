@@ -12,10 +12,17 @@ const Navbar = () => {
         dispatch(logout())
     }
 
+    
+
     return (
-        <header className="">
-            <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
+        <header className="bg-black absolute z-50 h-12">
+
+            <div>
+                <h1>Home</h1>
+            </div>
+            <div></div>
+            {/* <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+                <div className="flex h-16 items-center justify-between w-full bg-black">
                     <div className="md:flex md:items-center md:gap-12">
                         <Link className="block text-teal-600" href="/">
                             <span className="font-bold text-2xl">Home</span>
@@ -23,67 +30,9 @@ const Navbar = () => {
                         </Link>
                     </div>
 
-                    <div className="hidden md:block">
-                        <nav aria-label="Global">
-                            <ul className="flex items-center gap-6 text-sm">
-                                <li>
-                                    <a
-                                        className="text-gray-500 transition hover:text-gray-500/75"
-                                        href="/"
-                                    >
-                                        About
-                                    </a>
-                                </li>
 
-                                <li>
-                                    <a
-                                        className="text-gray-500 transition hover:text-gray-500/75"
-                                        href="/"
-                                    >
-                                        Careers
-                                    </a>
-                                </li>
 
-                                <li>
-                                    <a
-                                        className="text-gray-500 transition hover:text-gray-500/75"
-                                        href="/"
-                                    >
-                                        History
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a
-                                        className="text-gray-500 transition hover:text-gray-500/75"
-                                        href="/"
-                                    >
-                                        Services
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a
-                                        className="text-gray-500 transition hover:text-gray-500/75"
-                                        href="/"
-                                    >
-                                        Projects
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a
-                                        className="text-gray-500 transition hover:text-gray-500/75"
-                                        href="/"
-                                    >
-                                        Blog
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 ml-auto">
 
                         {!user && <div className="sm:flex sm:gap-4">
                             <Link href={"/signin"}>
@@ -115,7 +64,7 @@ const Navbar = () => {
                         </div>}
                     </div>
                 </div>
-            </div>
+            </div> */}
         </header>
 
     )

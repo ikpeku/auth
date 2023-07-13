@@ -2,7 +2,7 @@
 import React, {FormEvent} from 'react';
 import Link from "next/link";
 import {useState} from "react";
-import {setUser} from "@/redux/features/userSlice";
+import {logout, setUser} from "@/redux/features/userSlice";
 import {useAppDispatch} from "@/redux/store";
 import {useRouter} from "next/navigation";
 import {useRegisterUserMutation} from "@/redux/api/authApi";
@@ -19,7 +19,12 @@ const Page = () => {
     const [registerUser, { isLoading, isSuccess, error, isError }] =
         useRegisterUserMutation();
 
-    const handleSubmit = async(event: FormEvent<HTMLFormElement>) => {
+        const data =
+        localStorage.getItem("data") !== null
+            ? JSON.parse(String(localStorage.getItem("data")))
+            : dispatch(logout());
+
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         if(
             email.slice() === ""
             && password.slice() === ""
@@ -27,9 +32,16 @@ const Page = () => {
             && lastName.slice() === ""
         ) return
 
+        if(email.trim() === data.user.email) {
+            window.alert("Already registered credentials.")
+            return
+        }
+
+
+
         event.preventDefault()
         dispatch(setUser({email, password, firstName, lastName}))
-        await route.push("/")
+        route.push("/")
         registerUser({email, password, firstName, lastName})
 
     }

@@ -1,13 +1,93 @@
 "use client";
-import Navbar from "@/component/Navbar";
+
+import React, { useEffect, useState } from 'react';
+import {useAppDispatch, useAppSelector} from "@/redux/store";
+import {logout} from "@/redux/features/userSlice"
+import Link from "next/link";
 
 
 export default function Home() {
+    const [data, setData] = useState({
+        user: {
+          email: "",
+          password: "",
+          firstName: "",
+          lastName: ""
+        },
+        isLogin: false
+      })
+    
+
+  
+
+    const user = useAppSelector(state => state.userState.user)
+    const dispatch = useAppDispatch()
+
+    const handleLogout = () => {
+        dispatch(logout())
+        window.location.reload()
+    }
+
+    useEffect(() => {
+        const data =
+        localStorage.getItem("data") !== null
+            ? JSON.parse(String(localStorage.getItem("data")))
+            : dispatch(logout());
+        setData(data)
+    }, [user])
 
 
   return (
     <main className="">
-        <Navbar />
+        <header>
+<div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+    <div className="flex h-16 items-center justify-between ">
+        <div className="md:flex md:items-center md:gap-12">
+            <Link className="block text-teal-600" href="/">
+                <span className="font-bold text-2xl">Home</span>
+
+            </Link>
+        </div>
+
+
+
+        <div className="flex items-center gap-4 ml-auto">
+
+             <div className="sm:flex sm:gap-4">
+                {!data?.isLogin && 
+                       <Link href={"/signin"}>
+                    <p
+                        className="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
+
+                    >
+                        Login
+                    </p>
+                </Link>
+}
+{!data?.isLogin &&
+                <div className="hidden sm:flex">
+                    <Link href={"/signup"}>
+                        <p
+                            className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
+
+                        >
+                            Register
+                        </p>
+                    </Link>
+                </div>}
+            </div>
+
+
+            {data?.isLogin && <div className="flex items-center gap-5">
+                {data?.user?.firstName && <p>Hello, {data?.user?.firstName}</p>}
+
+                <button onClick={handleLogout}>logout</button>
+            </div>}
+
+        </div>
+    </div>
+    </div>
+</header>
 
         <section
             className="relative bg-[url(https://images.unsplash.com/photo-1604014237800-1c9102c219da?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80)] bg-cover bg-center bg-no-repeat"

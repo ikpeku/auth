@@ -6,15 +6,19 @@ import { IUser } from '../api/types';
 
 interface IUserState {
   user: IUser | null;
+  isLogin: boolean
 }
 
-const data =
-    localStorage.getItem("data") !== null
-        ? JSON.parse(String(localStorage.getItem("data")))
-        : [];
+
 
 const initialState: IUserState = {
-  user: data
+  user: {
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: ""
+  },
+  isLogin: false
 };
 
 export const userSlice = createSlice({
@@ -22,11 +26,22 @@ export const userSlice = createSlice({
   name: 'userSlice',
   reducers: {
     logout: (state) => {
-      localStorage.setItem("data", JSON.stringify(initialState));
+      localStorage.setItem("data", JSON.stringify({ ...state, isLogin: false }))
     },
     setUser: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;
-      localStorage.setItem("data", JSON.stringify(state.user));
+
+      localStorage.setItem("data", JSON.stringify(
+        {
+          user: {
+            email: action.payload.email,
+            password: action.payload.password,
+            firstName: action.payload.firstName,
+            lastName: action.payload.lastName
+          },
+          isLogin: true
+        }
+      ));
     },
   },
 });

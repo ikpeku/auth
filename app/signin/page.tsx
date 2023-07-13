@@ -2,38 +2,40 @@
 
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {useLoginUserMutation} from "@/redux/api/authApi";
-import {setUser} from "@/redux/features/userSlice";
+import {logout, setUser} from "@/redux/features/userSlice";
 import { useRouter } from 'next/navigation'
 import {useAppDispatch} from "@/redux/store";
 import Link from "next/link";
 
 
 export default function Login() {
-    const [loginUser, { isLoading, isError, error, isSuccess }] =
-        useLoginUserMutation()
+    const [loginUser, { isLoading, isError, error, isSuccess }] = useLoginUserMutation()
     const route = useRouter()
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
     const dispatch = useAppDispatch()
-
     const data =
         localStorage.getItem("data") !== null
             ? JSON.parse(String(localStorage.getItem("data")))
-            : [];
+            : dispatch(logout());
+
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        if(!email || !password) {
+            window.alert("invalid credentials")
+            return
+        }
 
-        if(data?.email === email && data.password === password){
-            // dispatch(setUser({email, password}))
-            await route.push("/")
+        if(data?.user.email === email && data?.user.password === password){
+            localStorage.setItem("data", JSON.stringify({ ...data, isLogin: true}))
+            route.push("/")
         } else {
             window.alert("User not register")
         }
 
         loginUser({email, password})
-
 
     }
 
@@ -57,6 +59,7 @@ export default function Login() {
 
                         <div className="relative">
                             <input
+                                value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 type="email"
                                 className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
@@ -87,34 +90,13 @@ export default function Login() {
 
                         <div className="relative">
                             <input
+                                value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 type="password"
                                 className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                                 placeholder="Enter password"
                             />
-
-          {/*                  <span className="absolute inset-y-0 end-0 grid place-content-center px-4">*/}
-          {/*  <svg*/}
-          {/*      xmlns="http://www.w3.org/2000/svg"*/}
-          {/*      className="h-4 w-4 text-gray-400"*/}
-          {/*      fill="none"*/}
-          {/*      viewBox="0 0 24 24"*/}
-          {/*      stroke="currentColor"*/}
-          {/*  >*/}
-          {/*    <path*/}
-          {/*        strokeLinecap="round"*/}
-          {/*        strokeLinejoin="round"*/}
-          {/*        strokeWidth="2"*/}
-          {/*        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"*/}
-          {/*    />*/}
-          {/*    <path*/}
-          {/*        strokeLinecap="round"*/}
-          {/*        strokeLinejoin="round"*/}
-          {/*        strokeWidth="2"*/}
-          {/*        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"*/}
-          {/*    />*/}
-          {/*  </svg>*/}
-          {/*</span>*/}
+                            
                         </div>
                     </div>
 
